@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Your Notes</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+    />
+    
+    <style>
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        background-color: #121212;
+        color: #fff;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+      }
+
+      .navbar {
+        width: 100%;
+        background-color: #1e1e1e;
+        padding: 15px 30px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        box-shadow: 0 0 10px #ff3b3f44;
+        position: sticky;
+        top: 0;
+        z-index: 100;
+      }
+
+      .left-nav {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+      }
+
+      .navbar h1 {
+        margin: 0;
+        color: #ff3b3f;
+        font-size: 24px;
+      }
+
+      .navbar nav a,
+      .add-note-link {
+        margin-left: 20px;
+        color: #fff;
+        text-decoration: none;
+        font-weight: bold;
+        transition: color 0.3s ease;
+        cursor: pointer;
+      }
+
+      .navbar nav a:hover,
+      .add-note-link:hover {
+        color: #ff3b3f;
+      }
+
+      .container {
+        padding: 30px;
+        max-width: 900px;
+        margin: 0 auto;
+        flex-grow: 1;
+      }
+
+      h2 {
+        text-align: center;
+        color: #ff3b3f;
+        margin-bottom: 30px;
+      }
+
+      .note {
+        background-color: #1e1e1e;
+        padding: 20px;
+        border-radius: 12px;
+        margin-bottom: 20px;
+        box-shadow: 0 0 10px #ff3b3f44;
+      }
+
+      .note h3 {
+        margin: 0 0 10px;
+        color: #ff3b3f;
+      }
+
+      .note p {
+        margin: 0 0 15px;
+        line-height: 1.5;
+      }
+
+      .actions {
+        display: flex;
+        gap: 10px;
+      }
+
+      .actions form,
+      .actions a {
+        display: inline-block;
+      }
+
+      .actions button,
+      .actions a.button {
+        background-color: #ff3b3f;
+        border: none;
+        padding: 8px 14px;
+        border-radius: 6px;
+        color: #fff;
+        font-weight: bold;
+        text-decoration: none;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+      }
+
+      .actions button:hover,
+      .actions a.button:hover {
+        background-color: #e53539;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- NAVBAR -->
+    <div class="navbar">
+      <div class="left-nav">
+        <h1>MyAuth</h1>
+        <a href="/add-note" class="add-note-link">📝 Add Note</a>
+        <a href="/notes" class="add-note-link">📒 Notes</a>
+      </div>
+      <nav>
+        <% if (user) { %>
+            <form action="/logout" method="POST" style="display: inline;">
+                <button
+                  type="submit"
+                  style="
+                    background: none;
+                    border: none;
+                    color: #fff;
+                    font-weight: bold;
+                    cursor: pointer;
+                    transition: color 0.3s ease;
+                  "
+                  onmouseover="this.style.color='#ff3b3f';"
+                  onmouseout="this.style.color='#fff';"
+                >
+                  <i class="fas fa-sign-out-alt" style="margin-right: 6px;"></i>Logout
+                </button>
+              </form>
+              
+        <% } else { %>
+          <a href="/register">Register</a>
+          <a href="/login">Login</a>
+        <% } %>
+      </nav>
+    </div>
+
+    <!-- NOTES CONTENT -->
+    <div class="container">
+      <h2>Your Notes</h2>
+
+      <% if (notes.length === 0) { %>
+        <p style="text-align:center;">You don't have any notes yet.</p>
+      <% } else { %>
+        <% notes.forEach(note => { %>
+          <div class="note">
+            <h3><%= note.title %></h3>
+            <p><%= note.text %></p>
+            <div class="actions">
+              <a class="button" type="hidden" href="/edit-note/<%= note._id %>">Edit</a>
+              <form action="/delete-note/<%= note.id %>" method="POST" onsubmit="return confirm('Are you sure you want to delete this note?');">
+                <button type="submit">Delete</button>
+              </form>
+            </div>
+          </div>
+        <% }) %>
+      <% } %>
+    </div>
+  </body>
+</html>

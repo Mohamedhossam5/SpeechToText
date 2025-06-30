@@ -1,0 +1,194 @@
+<!-- edit-note.ejs -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Edit Note</title>
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+  />
+  <style>
+    
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        background-color: #121212;
+        color: #fff;
+        height: 100vh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .navbar {
+        width: 100%;
+        background-color: #1e1e1e;
+        padding: 15px 30px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        box-shadow: 0 0 10px #ff3b3f44;
+        position: sticky;
+        top: 0;
+        z-index: 100;
+      }
+
+      .left-nav {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+      }
+
+      .navbar h1 {
+        margin: 0;
+        color: #ff3b3f;
+        font-size: 24px;
+      }
+
+      .navbar nav a,
+      .add-note-link {
+        margin-left: 20px;
+        color: #fff;
+        text-decoration: none;
+        font-weight: bold;
+        transition: color 0.3s ease;
+        cursor: pointer;
+      }
+
+      .navbar nav a:hover,
+      .add-note-link:hover {
+        color: #ff3b3f;
+      }
+
+      .container {
+        width: 360px;
+        background-color: #1e1e1e;
+        padding: 30px;
+        border-radius: 12px;
+        box-shadow: 0 0 10px #ff3b3f44;
+        margin-top: 40px;
+      }
+
+      h2 {
+        text-align: center;
+        color: #ff3b3f;
+      }
+
+      .form-group {
+        margin-bottom: 20px;
+      }
+
+      label {
+        display: block;
+        margin-bottom: 8px;
+        font-weight: 500;
+      }
+
+      input,
+      textarea {
+        width: 100%;
+        padding: 12px;
+        border-radius: 6px;
+        border: none;
+        background-color: #2c2c2c;
+        color: #fff;
+      }
+
+      textarea {
+        resize: vertical;
+        min-height: 100px;
+      }
+
+      button {
+        width: 100%;
+        background-color: #ff3b3f;
+        border: none;
+        padding: 12px;
+        border-radius: 6px;
+        color: #fff;
+        font-weight: bold;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+      }
+
+      button:hover {
+        background-color: #e53539;
+      }
+
+      .add-note-link {
+        color: #fff;
+        text-decoration: none;
+        font-weight: bold;
+        font-size: 14px;
+        transition: color 0.3s ease;
+      }
+
+      .add-note-link:hover {
+        color: #ff3b3f;
+      }
+    
+  </style>
+</head>
+<body>
+  <!-- NAVBAR -->
+  <div class="navbar">
+    <div class="left-nav">
+      <h1>MyAuth</h1>
+      <a href="/add-note" class="add-note-link">📝 Add Note</a>
+      <a href="/notes" class="add-note-link">📒 Notes</a>
+    </div>
+    <nav>
+      <% if (user) { %>
+        <form action="/logout" method="POST" style="display: inline;">
+          <button type="submit" style="background: none; border: none; color: #fff; font-weight: bold; cursor: pointer; transition: color 0.3s ease;"
+            onmouseover="this.style.color='#ff3b3f';"
+            onmouseout="this.style.color='#fff';">
+            <i class="fas fa-sign-out-alt" style="margin-right: 6px;"></i>Logout
+          </button>
+        </form>
+      <% } else { %>
+        <a href="/register">Register</a>
+        <a href="/login">Login</a>
+      <% } %>
+    </nav>
+  </div>
+
+  <!-- EDIT NOTE FORM -->
+  <form action="/edit-note" method="POST">
+    <div class="container">
+      <h2>Edit Note</h2>
+
+      <!-- Hidden input for note ID -->
+      <input type="hidden" name="noteId" value="<%= note.id %>" />
+
+      <div class="form-group">
+        <label for="noteTitle">Title</label>
+        <input
+          type="text"
+          id="noteTitle"
+          name="title"
+          value="<%= note.title %>"
+          required
+        />
+      </div>
+
+      <div class="form-group">
+        <label for="noteDescription">Description</label>
+        <textarea
+          id="noteDescription"
+          name="text"
+          required
+        ><%= note.text %></textarea>
+      </div>
+
+      <button type="submit">Update Note</button>
+    </div>
+  </form>
+</body>
+</html>
